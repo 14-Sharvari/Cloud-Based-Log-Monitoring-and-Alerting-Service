@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-processor
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: log-processor
+  template:
+    metadata:
+      labels:
+        app: log-processor
+    spec:
+      containers:
+      - name: log-processor
+        image: gcr.io/logmonitoringservice/log-processor:latest
+        ports:
+        - containerPort: 5000
+        livenessProbe: # Ensures the container is running
+          httpGet:
+            path: /ping  # Replace with an endpoint that always returns 200 OK
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe: # Ensures the container is ready to serve traffic
+          httpGet:
+            path: /ping  # Replace with an endpoint that always returns 200 OK
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: # Resource requests and limits
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"

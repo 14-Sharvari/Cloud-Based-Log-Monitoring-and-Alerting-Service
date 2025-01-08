@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alerting-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alerting-system
+  template:
+    metadata:
+      labels:
+        app: alerting-system
+    spec:
+      containers:
+      - name: alerting-system
+        image: sharvarig14/alerting-system:latest
+        env:
+        - name: BOOTSTRAP_SERVERS
+          value: "kafka-controller-headless.default.svc.cluster.local:9092"
+        - name: PROCESSED_TOPIC
+          value: "processed-logs"
+        - name: SMTP_SERVER
+          value: "smtp.gmail.com"
+        - name: SMTP_PORT
+          value: "587"
+        - name: EMAIL_ADDRESS
+          value: "sharvarighatake2000@gmail.com"
+        - name: EMAIL_PASSWORD
+          value: "atrv tngb hlrh ufaz"
+        - name: ALERT_RECIPIENT
+          value: "jadhavdiksha5@gmail.com"
+        - name: SECURITY_PROTOCOL
+          value: "PLAINTEXT"
+
+
